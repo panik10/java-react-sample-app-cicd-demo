@@ -12,6 +12,9 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21.0.10_7-jre-ubi10-minimal
 WORKDIR /app
 
+ARG DESCOPE_PROJECT_ID
+ENV DESCOPE_PROJECT_ID=$DESCOPE_PROJECT_ID
+
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080

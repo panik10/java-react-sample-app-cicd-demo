@@ -8,6 +8,8 @@ RUN npm run build
 
 # Stage 2: Serve with Nginx
 FROM nginx:stable-alpine
+ARG REACT_APP_DESCOPE_PROJECT_ID
+ENV REACT_APP_DESCOPE_PROJECT_ID=$REACT_APP_DESCOPE_PROJECT_ID
 
 COPY --from=build /app/build /usr/share/nginx/html
 

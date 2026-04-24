@@ -21,8 +21,6 @@ jobs:
       - name: Test FrontEnd
         run: npm test -- --watchAll=false
         working-directory: client
-        env:
-          CI: true
 
   lint-test-backend:
     runs-on: ubuntu-latest

@@ -1,36 +1,36 @@
 import { useSession } from "@descope/react-sdk";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Layout = () => {
-  const { isSessionLoading, isAuthenticated } = useSession();
+const Layout = ({ children }) => {
+  const { isSessionLoading } = useSession();
 
   if (isSessionLoading) {
-    return <></>;
+    return null;
   }
+
   return (
     <>
-      <nav>
-        <ul>
-          {
-            !isAuthenticated && <li>
-                <Link to="/">Home</Link>
-            </li>
-          }
+      <header>
+        <nav>
+          <ul>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/contacts">Contacts</Link></li>
+            <li><Link to="/vanilla-dream">Vanilla Dream</Link></li>
+            <li><Link to="/chocolate-indulgence">Chocolate Indulgence</Link></li>
+            <li><Link to="/strawberry-bliss">Strawberry Bliss</Link></li>
+          </ul>
+        </nav>
+      </header>
 
-          {
-            !isAuthenticated ? <li>
-            <Link to="/signin">Sign in</Link>
-            </li> : <li>
-                <Link to="/dashboard">Dashboard</Link>
-            </li>
-          }
-          
-        </ul>
-      </nav>
+      <main>
+        {children}
+      </main>
 
-      <Outlet />
+      <footer>
+        <p>&copy; {new Date().getFullYear()} Bravo Ice Cream. All rights reserved.</p>
+      </footer>
     </>
-  )
+  );
 };
 
 export default Layout;

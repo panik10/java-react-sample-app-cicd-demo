@@ -18,5 +18,7 @@ ENV DESCOPE_PROJECT_ID=$DESCOPE_PROJECT_ID
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health/liveness || exit 1
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

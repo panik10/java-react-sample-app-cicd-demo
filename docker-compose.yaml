@@ -1,0 +1,33 @@
+services:
+  backend:
+    image: ghcr.io/panik10/java-react-sample-app-cicd-demo-be:latest
+    pull_policy: always
+    # image: local-test-be:1.0.1
+    # build:
+    #   context: ./server
+    #   args:
+    #     - DESCOPE_PROJECT_ID=P3CoHQVvalPao3I3FVTDFu6HSYSL
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  frontend:
+    image: ghcr.io/panik10/java-react-sample-app-cicd-demo-fe:latest
+    pull_policy: always
+    # image: local-test:1.0.7
+    # build:
+    #   context: ./client
+    #   args:
+    #     - REACT_APP_DESCOPE_PROJECT_ID=P3CoHQVvalPao3I3FVTDFu6HSYSL
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    depends_on:
+      backend:
+        condition: service_healthy
+
+networks:
+  app-network:
+    driver: bridge

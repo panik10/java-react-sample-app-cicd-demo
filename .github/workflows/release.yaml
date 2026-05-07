@@ -39,7 +39,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          fingerprint: ${{ secrets.FINGERPRINT }}
+          # fingerprint: ${{ secrets.FINGERPRINT }}
           script: |
             echo "Tag to deploy is ${{ github.sha }}, version $RELEASE_VERSION"
             whoami

@@ -1,33 +1,40 @@
 services:
   backend:
-    image: ghcr.io/panik10/java-react-sample-app-cicd-demo-be:latest
-    pull_policy: always
-    # image: local-test-be:1.0.1
-    # build:
-    #   context: ./server
-    #   args:
-    #     - DESCOPE_PROJECT_ID=P3CoHQVvalPao3I3FVTDFu6HSYSL
-    ports:
-      - "8080:8080"
+    image: ghcr.io/panik10/java-react-sample-app-cicd-demo-be:${IMAGE_TAG}
     networks:
-      - app-network
+      - app-net
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   frontend:
-    image: ghcr.io/panik10/java-react-sample-app-cicd-demo-fe:latest
-    pull_policy: always
-    # image: local-test:1.0.7
-    # build:
-    #   context: ./client
-    #   args:
-    #     - REACT_APP_DESCOPE_PROJECT_ID=P3CoHQVvalPao3I3FVTDFu6HSYSL
+    image: ghcr.io/panik10/java-react-sample-app-cicd-demo-fe:${IMAGE_TAG}
     ports:
-      - "80:80"
+      - "8081:80"
     networks:
-      - app-network
-    depends_on:
-      backend:
-        condition: service_healthy
+      - app-net
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
-  app-network:
-    driver: bridge
+  app-net:
+    driver: overlay

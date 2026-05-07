@@ -42,4 +42,7 @@ jobs:
           fingerprint: ${{ secrets.FINGERPRINT }}
           script: |
             echo "Tag to deploy is ${{ github.sha }}, version $RELEASE_VERSION"
-            docker compose up -d --force-recreate
+            whoami
+            cd /home/azureuser/prod/
+            export IMAGE_TAG=${{ env.IMAGE_TAG }}
+            docker stack deploy -c docker-compose.yml stage_app

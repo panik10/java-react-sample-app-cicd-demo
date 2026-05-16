@@ -33,7 +33,7 @@ jobs:
           docker buildx imagetools create ghcr.io/${{ github.repository }}-fe:latest \
             --tag ghcr.io/${{ github.repository }}-fe:$RELEASE_VERSION
       
-      - name: Deployment to Stage
+      - name: Deployment to Production
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.HOST }}
@@ -44,5 +44,5 @@ jobs:
             echo "Tag to deploy is ${{ github.sha }}, version $RELEASE_VERSION"
             whoami
             cd /home/azureuser/prod/
-            export IMAGE_TAG=${{ env.IMAGE_TAG }}
+            export IMAGE_TAG=${GITHUB_REF#refs/tags/v}
             docker stack deploy -c docker-compose.yml stage_app
